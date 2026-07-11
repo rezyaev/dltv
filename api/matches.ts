@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 export default {
 	async fetch(_request: Request) {
 		const response = await fetch(
