@@ -1,12 +1,5 @@
-const TOKEN = import.meta.env.VITE_PANDASCORE_TOKEN;
-
-const requestInit = { headers: { accept: "application/json", authorization: `Bearer ${TOKEN}` } };
-
 export async function fetchMatches() {
-	const response = await fetch(
-		"https://api.pandascore.co/dota2/matches?filter[serie_id]=10728&sort=begin_at&page=1&per_page=10",
-		requestInit,
-	);
+	const response = await fetch("/api/matches");
 
 	return (await response.json()) as Promise<Match[]>;
 }

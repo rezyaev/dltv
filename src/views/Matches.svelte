@@ -29,7 +29,7 @@
 
 {#await fetchMatches() then matches}
 	{#each groupByDate(matches) as group}
-		<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60">{formatGroupDate(group[0].begin_at)}</h2>
+		<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">{formatGroupDate(group[0].begin_at)}</h2>
 		<ul class="list bg-base-300 rounded-xl">
 			{#each group as match}
 				{@render MatchSnippet(match)}
@@ -52,7 +52,9 @@
 
 {#snippet TeamSnippet(team: Team)}
 	<div class="gap-2 flex items-center">
-		<img class="h-4" alt="logo" src={team.dark_mode_image_url ?? team.image_url} />
+		{#if team.dark_mode_image_url || team.image_url}
+			<img class="h-4" alt="logo" src={team.dark_mode_image_url ?? team.image_url} />
+		{/if}
 
 		<span>{team.name}</span>
 	</div>
