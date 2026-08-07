@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { groupBy } from "lodash-es";
-	import { format, isThisWeek, isToday, isTomorrow, isYesterday } from "date-fns";
 	import { fetchMatches, type Match, type Team } from "./matches";
+	import { groupBy } from "lodash-es";
+	import { format, isBefore, isThisWeek, isToday, isTomorrow, isYesterday } from "date-fns";
 
 	function groupByDate(matches: Match[]) {
 		const dateMatchesMap = groupBy(matches, (match) => {
@@ -27,20 +27,44 @@
 	}
 </script>
 
-{#await fetchMatches() then matches}
-	{#each groupByDate(matches) as group}
-		<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">{formatGroupDate(group[0].begin_at)}</h2>
-		<ul class="list bg-base-300 rounded-xl">
-			{#each group as match}
-				{@render MatchSnippet(match)}
-			{/each}
-		</ul>
-	{/each}
-{/await}
+<div>
+	{#await fetchMatches("running") then matches}
+		{#if matches.length > 0}
+			<div class="mb-4">
+				<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">Текущие</h2>
+				<ul class="list bg-base-300 rounded-xl">
+					{#each matches as match}
+						{@render MatchSnippet(match)}
+					{/each}
+				</ul>
+			</div>
+		{/if}
+	{/await}
+
+	{#await fetchMatches("upcoming") then matches}
+		{#each groupByDate(matches) as group}
+			<div class="mb-4">
+				<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">
+					{formatGroupDate(group[0].begin_at)}
+				</h2>
+				<ul class="list bg-base-300 rounded-xl">
+					{#each group as match}
+						{@render MatchSnippet(match)}
+					{/each}
+				</ul>
+			</div>
+		{/each}
+	{/await}
+</div>
 
 {#snippet MatchSnippet(match: Match)}
 	<li class="list-row items-center gap-6">
-		<span class="text-base-content/60 font-bold">{format(match.begin_at, "HH:mm")}</span>
+		{#if isBefore(match.begin_at, new Date())}
+			<span class="badge badge-sm badge-secondary uppercase font-bold">Live</span>
+		{:else}
+			<span class="text-base-content/60 font-bold">{format(match.begin_at, "HH:mm")}</span>
+		{/if}
+
 		<div class="flex flex-col gap-2">
 			{#each match.opponents as opponent}
 				{@render TeamSnippet(opponent.opponent)}
