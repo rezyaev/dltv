@@ -33,18 +33,20 @@
 	}
 </script>
 
-{#each groupByDate(matches) as group}
-	<div class="mb-4">
-		<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">
-			{formatGroupDate(group[0].begin_at)}
-		</h2>
-		<ul class="list bg-base-300 rounded-xl">
-			{#each group as match}
-				{@render MatchRow(match)}
-			{/each}
-		</ul>
-	</div>
-{/each}
+<div>
+	{#each groupByDate(matches) as group}
+		<div class="mb-4">
+			<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">
+				{formatGroupDate(group[0].begin_at)}
+			</h2>
+			<ul class="list bg-base-300 rounded-xl">
+				{#each group as match}
+					{@render MatchRow(match)}
+				{/each}
+			</ul>
+		</div>
+	{/each}
+</div>
 
 {#snippet MatchRow(match: Match)}
 	<li class="list-row items-center gap-6 px-6">

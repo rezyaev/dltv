@@ -1,8 +1,7 @@
-export async function fetchMatches(status: "upcoming" | "running" | "past") {
-	const response = await fetch(`/api/matches?status=${status}`);
-	const matches = (await response.json()) as Match[];
+export async function fetchMatches() {
+	const response = await fetch(`/api/matches`);
 
-	return matches.filter((m: Match) => m.opponents.length > 0);
+	return (await response.json()) as Match[];
 }
 
 export type Match = {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fetchMatches } from "./views/matches/matches";
 	import Matches from "./views/matches/Matches.svelte";
+	import Group from "./views/group/Group.svelte";
 
 	let tab = $state<"upcoming" | "past" | "group">("upcoming");
 </script>
@@ -12,21 +13,18 @@
 		<input type="radio" name="my_tabs_1" class="tab flex-1" aria-label="Группа" bind:group={tab} value="group" />
 	</div>
 
-	{#if tab === "upcoming"}
-		{#await fetchMatches("running") then matches}
-			{#if matches.length > 0}
-				<Matches {matches} live={true} showResults={true} />
+	{#await fetchMatches() then matches}
+		{#if tab === "upcoming"}
+			{@const liveMatches = matches.filter((m) => m.status === "running")}
+			{#if liveMatches.length > 0}
+				<Matches matches={liveMatches} live={true} showResults={true} />
 			{/if}
-		{/await}
 
-		{#await fetchMatches("upcoming") then matches}
-			<Matches {matches} />
-		{/await}
-	{:else if tab === "past"}
-		{#await fetchMatches("past") then matches}
-			<Matches {matches} showResults={true} />
-		{/await}
-	{:else if tab === "group"}
-		group
-	{/if}
+			<Matches matches={matches.filter((m) => m.status === "not_started" && m.opponents.length > 0)} />
+		{:else if tab === "past"}
+			<Matches matches={matches.filter((m) => m.status === "finished")} showResults={true} />
+		{:else if tab === "group"}
+			<Group />
+		{/if}
+	{/await}
 </main>
