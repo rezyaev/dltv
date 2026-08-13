@@ -35,7 +35,7 @@
 
 <div>
 	{#each groupByDate(matches) as group}
-		<div class="mb-4">
+		<div class="mb-4 last:mb-0">
 			<h2 class="mb-2 ml-2 text-sm font-bold text-base-content/60 first-letter:uppercase">
 				{formatGroupDate(group[0].begin_at)}
 			</h2>

@@ -6,7 +6,7 @@
 	let tab = $state<"upcoming" | "past" | "group">("upcoming");
 </script>
 
-<main class="w-full h-full bg-base-100 p-4">
+<main class="bg-base-100 p-4">
 	<div class="tabs tabs-box mb-4">
 		<input type="radio" name="my_tabs_1" class="tab flex-1" aria-label="Матчи" bind:group={tab} value="upcoming" />
 		<input type="radio" name="my_tabs_1" class="tab flex-1" aria-label="Результаты" bind:group={tab} value="past" />
