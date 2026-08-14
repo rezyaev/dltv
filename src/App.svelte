@@ -24,7 +24,7 @@
 		{:else if tab === "past"}
 			<Matches matches={matches.filter((m) => m.status === "finished")} showResults={true} />
 		{:else if tab === "group"}
-			<Group />
+			<Group {matches} />
 		{/if}
 	{/await}
 </main>
